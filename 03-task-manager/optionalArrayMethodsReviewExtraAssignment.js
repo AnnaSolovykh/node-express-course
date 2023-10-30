@@ -34,7 +34,7 @@ const object = {
   behavior: function() {
     // "this" is a reference to the object we are inside of right now
     this.data++;
-    console.log('OOP demo:', this.data);
+    //console.log('OOP demo:', this.data);
   }
 }
 
@@ -76,8 +76,8 @@ object.behavior()
 // - Array.prototype.forEach
 //   - `forEach` is like a "for" loop. It calls the callback for every item in
 //     the array
-   evenNumbers.forEach((thingy) => console.log('even', thingy));
-   doubles.forEach((d) => console.log('doubled!', d));
+  // evenNumbers.forEach((thingy) => console.log('even', thingy));
+  // doubles.forEach((d) => console.log('doubled!', d));
 
 // - Array.prototype.reduce
 //   - A bit tricky
@@ -87,7 +87,7 @@ object.behavior()
   const totalLettersInNames = lastNames.reduce((runningTotal, currentName) => {
     return runningTotal + currentName.length;
   }, initialValue)
-  console.log({totalLettersInNames});
+  //console.log({totalLettersInNames});
 
   // The first argument is always the return value that we're building up.
   // I called it, "runningTotal" before. The default name is "accumulator."
@@ -100,8 +100,8 @@ object.behavior()
   }, {} /* second arg is always the initial value! Here, it's an empty object */);
 
   // Now we can lookup people by id!
-  console.log({lookedUpPerson1: peopleIdMap[1]})
-  console.log({lookedUpPerson2: peopleIdMap[2]});
+  //console.log({lookedUpPerson1: peopleIdMap[1]})
+  //console.log({lookedUpPerson2: peopleIdMap[2]});
 
   // Sometimes, you'll see this fancy syntax used with reduce, especially when
   // building mappings. Beware, though, there's a lot of unnecessary runtime
@@ -114,34 +114,14 @@ object.behavior()
   }), {});
 
   // Now we can lookup people by name!
-  console.log({lookupTim: peopleNameMap['tim']})
-  console.log({lookupJane: peopleNameMap['jane']});
+ // console.log({lookupTim: peopleNameMap['tim']})
+ // console.log({lookupJane: peopleNameMap['jane']});
 
 /////////////////////////// CHALLENGES ////////////////////////////////////////
 
 // Each challenge will be related to this array of names. It will pose a
 // problem related to these names, and then implement the solution. The
 // challenges are:
-//
-// - Create a new array with only each person's last name
-// - Filter names that don't match the format "<first> <last>"
-//   - Should remove Tam because she has a double-space
-//   - Should remove Carlow because he has a middle-name
-//   - Should also remove names like:
-//     - "Timothy      Cook"
-//     - "Nick_Masters"
-//     - "Timmy-Turner"
-//     - "Billy\nBob"
-//     - etc.
-// - Create a new array where everyone's name is converted to "Title Case"
-//   - The first character of each word should be uppercase
-//   - All other characters in the word should be lowercase
-//   - expected output is ['Dimitry Santiago', 'Carlos D. Perez', 'Tam Person', ...]
-// - Last Challenge:
-//     Remove names with the wrong format
-//     AND change it to "Title Case"
-//     AND remove people whose last name ends with z
-//     AND write a message asking them to sign up
 //
 // For an extra assignment, you may implement these yourself! Include your
 // changes to this file with your MR for week 3.
@@ -153,6 +133,92 @@ const names = [
   'Mariana Gomez',
   'Amy You'
 ];
+// - Create a new array with only each person's last name
+const surnames = names.map(name => {
+  let nameSplitted = name.split(" ");
+  let surname = nameSplitted[nameSplitted.length - 1];
+  return surname;
+}); 
+
+console.log("HOMETASK 1", surnames);
+
+
+// - Filter names that don't match the format "<first> <last>"
+const  namesToFilter = [
+  'Dimitry SantiAgo',
+  'Carlos d. Perez',
+  'tam  person',
+  'Mariana Gomez',
+  'Amy You',
+  "Timothy      Cook",
+  "Nick_Masters",
+  "Billy\nBob"
+];
+
+const isValidName = namesToFilter.filter(name => {
+  //   - Should remove Carlow because he has a middle-name
+    let nameSplitted = name.split(" ");
+    if (nameSplitted.length > 2) return false;
+    //   - Should remove Tam because she has a double-space
+    const spaceCount = name.length - name.replace(/ /g, '').length;
+    if (spaceCount > 1) return false; 
+    //   - Should also remove names like:
+    //     - "Timothy      Cook"
+    //     - "Nick_Masters"
+    //     - "Timmy-Turner"
+    //     - "Billy\nBob"
+    //     - etc.
+    for (let char of name) {
+      if (!char.match(/[a-zA-Z ]/)) {
+        return false;
+      }
+    }
+    return true;
+  }
+);
+
+console.log("HOMETASK 2", isValidName);
+
+// - Create a new array where everyone's name is converted to "Title Case"
+//   - The first character of each word should be uppercase
+//   - All other characters in the word should be lowercase
+//   - expected output is ['Dimitry Santiago', 'Carlos D. Perez', 'Tam Person', ...]
+const convertToTitleCase = names.map(name => {
+    let nameSplitted = name.split(" ");
+    return nameSplitted.map(word => {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(" ");
+  });
+
+console.log("HOMETASK 3", convertToTitleCase);
+
+// - Last Challenge:
+//     Remove names with the wrong format
+//     AND change it to "Title Case"
+//     AND remove people whose last name ends with z
+//     AND write a message asking them to sign up
+
+const hasLastNameEndingWithZ = (name) => {
+  let surname = name.split(" ").pop(); 
+  return surname.endsWith('z') || surname.endsWith('Z');
+};
+
+const convertToTitleCaseForIndividual = (name) => {
+    let nameSplitted = name.split(" ");
+    return nameSplitted.map(word => {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(" ");
+};
+
+const finalNames = isValidName
+  .filter(name => !hasLastNameEndingWithZ(name))
+  .map(name => convertToTitleCaseForIndividual(name));
+
+const askToSignUp = (name) => `${name}, please sign up!`;
+const allInvitations = finalNames.map(askToSignUp);
+
+console.log("HOMETASK 4", allInvitations);
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //// put your answers above if you wish to do the challenges on your own //////
@@ -177,7 +243,7 @@ const everyonesLastName = names.map((name) => {
   const lastName = eachWordSeparated.pop();
   return lastName;
 });
-console.log('everyone last name', everyonesLastName);
+//console.log('everyone last name', everyonesLastName);
 
 //////// CHALLENGE: Filter to the people who followed the right
 // "right format" is "<first name> <last name>" with a single space!
@@ -185,7 +251,7 @@ const rightFormat = /^\w+ \w+$/;
 const matchesTeachersPedanticFormattingRule = names.filter((name) => {
   return name.match(rightFormat);
 });
-console.log('good students', matchesTeachersPedanticFormattingRule)
+//console.log('good students', matchesTeachersPedanticFormattingRule)
 // (joke :)
 
 
@@ -215,7 +281,7 @@ const titledNames = names.map((name) => {
   });
   return titledName.join(" ")
 });
-console.log('titledNames', titledNames);
+//console.log('titledNames', titledNames);
 
 // Same example as above (change every name to title case), but I'll break it
 // up into smaller pieces to make it more readable. Each callback function
@@ -296,10 +362,10 @@ const transformNameIntoTitleCase = (name) => {
   return titleCaseWords.join(' ');
 }
 
-console.log(
-  'titledNames verbose',
-  names.map(transformNameIntoTitleCase)
-)
+//console.log(
+//  'titledNames verbose',
+//  names.map(transformNameIntoTitleCase)
+//)
 
 
 //////// CHALLENGE: Remove names with the wrong format
@@ -322,4 +388,4 @@ const result = names
     Want to buy my thing?
   `);
 
-console.log('result', result);
+//console.log('result', result);
