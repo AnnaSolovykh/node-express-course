@@ -3,11 +3,11 @@ const app = express();
 const tasks = require('./routes/tasks');
 const connectDB = require('./db/connect')
 require('dotenv').config();
+const notFound = require('./middleware/not-found')
 //middleware 
 app.use(express.static('./public'))
 app.use(express.json());
-//otherwise we won't have data in req.body
-
+app.use(notFound);
 //routes
 app.use('/api/v1/tasks', tasks);
 
