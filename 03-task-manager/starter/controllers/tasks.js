@@ -4,6 +4,14 @@ const getAllTasks = async (req, res) => {
     try {
         const tasks = await Task.find({});
         res.status(200).json({ tasks });
+        //options:
+        //1
+        //res.status(200).json({ tasks, amount: tasks.length });
+        //2 (though success is redundant - frontend handles this anyway
+        //and "object in object" structure on frontend is clumsy 
+        //res
+        //    .status(200)
+        //    .json({ success: true, data: { tasks, nbHits: tasks.length } });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
@@ -54,9 +62,10 @@ const deleteTask = async (req, res) => {
         if (!task) {
             return res.status(404).json({ msg: `No task with id: ${taskID} `})
         }
-        res.status(200).json({ task });
-        //two different types of response:
-        //res.status(200).send();
+        //this type of response is redundant as we don't need to return the object on frontend
+        //res.status(200).json({ task });
+        //two other different types of response:
+        res.status(200).send();
         //res.status(200).json({ task: null, status: "success" });
     } catch (error) {
         res.status(500).json({ msg: error });
