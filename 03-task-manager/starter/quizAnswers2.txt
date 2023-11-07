@@ -1,0 +1,18 @@
+1.In this lesson, you created a middleware function called asyncWrapper. Why?
+ 
+    The repetitive try-catch blocks for error handling violate the DRY (Don't Repeat Yourself) principle. 
+    That is why we need to refactor the code 
+    - to make it cleaner 
+    - to ensure consistent error handling within different types of errors in one place.
+
+2. 
+    const { createCustomError } = require('./errors/custom-error');
+
+    const getTask = asyncWrapper(async (req, res, next) => {
+    const { id: taskID } = req.params;
+    const task = await Task.findOne({ _id: taskID });
+    if (!task) {
+        return next(createCustomError(`No task with id: ${taskID}`, 404));
+    }
+    res.status(200).json({ task });
+    });
