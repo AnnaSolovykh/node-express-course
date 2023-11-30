@@ -11,11 +11,11 @@ formDOM.addEventListener('submit', async (e) => {
     tokenDOM.classList.remove('text-success')
 
     e.preventDefault()
-    const username = usernameInputDOM.value
+    const name = usernameInputDOM.value
     const password = passwordInputDOM.value
 
     try {
-        const { data } = await axios.post('/api/v1/logon', { username, password })
+        const { data } = await axios.post('/api/v1/logon', { name, password })
 
         formAlertDOM.style.display = 'block'
         formAlertDOM.textContent = data.msg
